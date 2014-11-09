@@ -1,0 +1,26 @@
+{
+  "name": "fullcalendar-history",
+  "version": "0.0.0",
+  "authors": [
+    "Jan Ptacek <jan.ptacek@gmail.com>"
+  ],
+  "description": "viewRender handler that keeps displayed date range encoded in url query string",
+  "main": "fullcalendar.history.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "fullcalendar",
+    "history",
+    "url"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
