@@ -15,12 +15,11 @@ $(function() {
 	FullCalendarHistory.viewRender = function (view, element) {
 		if (history && FullCalendarHistory.on_navigation) {
 			var url;
-			if (event && event.target && $(event.target).hasClass('fc-today-button')) {
-				// today button = clear remembered date
-				url = location.pathname.replace(/\/(month|week|day)\/[-0-9]{10}/, '');
-				history.pushState(null, null, url);
-				$.removeCookie('fullcalendar-history-view-name', { path: '/' });
-				$.removeCookie('fullcalendar-history-start', { path: '/' });
+			if (0 && typeof(event) != 'undefined' && event.target && $(event.target).hasClass('fc-today-button')) {
+				// event is not accessible in firefox
+				// TODO will need some other means of clearing the remembered date
+				// FullCalendarHistory.clearRemembered();
+				// clear called in onClick event handler directly on the button
 			} else {
 				var view_name;
 				if (view.name == 'month') {
@@ -38,5 +37,13 @@ $(function() {
 			}
 		}
 		FullCalendarHistory.on_navigation = 1;
+	};
+	FullCalendarHistory.clearRemembered = function () {
+		// today button = clear remembered date
+		// bind in the calendar.ctp
+		url = location.pathname.replace(/\/(month|week|day)\/[-0-9]{10}/, '');
+		history.pushState(null, null, url);
+		$.removeCookie('fullcalendar-history-view-name', { path: '/' });
+		$.removeCookie('fullcalendar-history-start', { path: '/' });
 	};
 });
