@@ -20,6 +20,9 @@ $(function() {
 				// TODO will need some other means of clearing the remembered date
 				// FullCalendarHistory.clearRemembered();
 				// clear called in onClick event handler directly on the button
+				// TODO but that makes the library usage a bit more complex
+				// as the clearRemembered has to be binded once the calendar is instantiated
+				// TODO so still try to detect the today button in here after all
 			} else {
 				var view_name;
 				if (view.name == 'month') {
