@@ -24,29 +24,48 @@ $(function() {
 				// as the clearRemembered has to be binded once the calendar is instantiated
 				// TODO so still try to detect the today button in here after all
 			} else {
-				var view_name;
-				if (view.name == 'month') {
-					view_name = 'month';
-				} else if (view.name == 'agendaWeek') {
-					view_name = 'week';
-				} else if (view.name == 'agendaDay') {
-					view_name = 'day';
-				}
+				var tx = {
+					'month': 'month',
+					'agendaWeek': 'week',
+					'agendaDay': 'day',
+					'customYear': 'year'
+				};
+				var view_name = tx[view.name];
 				var start = view.intervalStart.format('YYYY-MM-DD');
-				url = location.pathname.replace(/\/(month|week|day)\/[-0-9]{10}/, '') + '/' + view_name + '/' + start;
-				history.pushState(null, null, url);
+				url = location.pathname.replace(/\/(year|month|week|day)\/[-0-9]{10}/, '') + '/' + view_name + '/' + start;
+				history.pushState({ viewName : view.name, start:start }, 'Kalendář - ' + start , url);
 				$.cookie('fullcalendar-history-view-name', view_name, { expires: 7, path: '/' });
 				$.cookie('fullcalendar-history-start', start, { expires: 7, path: '/' });
 			}
 		}
-		FullCalendarHistory.on_navigation = 1;
+		FullCalendarHistory.on_navigation = true;
 	};
 	FullCalendarHistory.clearRemembered = function () {
 		// today button = clear remembered date
 		// bind in the calendar.ctp
-		url = location.pathname.replace(/\/(month|week|day)\/[-0-9]{10}/, '');
-		history.pushState(null, null, url);
+		url = location.pathname.replace(/\/(year|month|week|day)\/[-0-9]{10}/, '');
+		history.pushState(null, 'Kalendář - nyní', url);
 		$.removeCookie('fullcalendar-history-view-name', { path: '/' });
 		$.removeCookie('fullcalendar-history-start', { path: '/' });
 	};
 });
+
+if ( window.history && window.history.pushState ) {
+	$(window).on( "popstate", function (event) {
+		event = event.originalEvent;
+		if (event.state) {
+			FullCalendarHistory.on_navigation = false; //don't re-push state
+			$('#calendar').fullCalendar('gotoDate', event.state.start);
+			FullCalendarHistory.on_navigation = false; //don't re-push state
+			$('#calendar').fullCalendar('changeView', event.state.viewName);
+		} else {
+			// once we push, the back button will resort to popping
+			// and the first backbutton press will not reload the last page
+			// so we do it manually here
+			// todo: replaceState on initial render is probably preferred
+			$.removeCookie('fullcalendar-history-view-name', { path: '/' });
+			$.removeCookie('fullcalendar-history-start', { path: '/' });
+			location.reload();
+		}
+	});
+}
