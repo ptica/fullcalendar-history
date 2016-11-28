@@ -2,7 +2,7 @@
 
 Persistent uris for fullcalendar views using history api.
 The solution sort of works as a proof of concept, but a rewrite is needed though.
-(ugly detection of today-button-click, no configuration, todos, no i18n, ...)
+(ugly detection of today-button-click, no uri configuration, todos, no i18n, ...)
 
 ```
 // hook history.pushState onto view rendering
